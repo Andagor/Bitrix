@@ -1,12 +1,10 @@
 <?php
-echo "in add_to_base<br>";
 require_once 'connect.php';
 
 // Добавление данных в MySQL
 function Add_to_Base($activity_data, $table_name)
 {
     $conn = GetConnectToDB();
-        echo "good <br>";
 
         try {
             $sql = ("INSERT INTO $table_name (activity_id, owner_id, owner_type_id, type_id, provider_id, provider_type_id, associated_entity_id, subject, description, created, last_updated, start_time, end_time, deadline, completed, status, author_id, responsible_id, priority, direction, location, com_id, com_type, com_value, com_entity_id, com_entity_type_id, client_fio, lead_or_company_title, region, district, locality, edrpou, what_interested, problems, service, holding_name, comment, land_bank, soil_treatment_technics, spraying_technics, harvesting_technics, drones, machinery_quality, client_type_technics, equipment_rental, equipment_supplier, equipment_availability, client_type, lpr_fio, lpr_phone, last_date_updated) VALUES (:activity_id, :owner_id, :owner_type_id, :type_id, :provider_id, :provider_type_id, :associated_entity_id, :subject, :description, :created, :last_updated, :start_time, :end_time, :deadline, :completed, :status, :responsible_id, :priority, :direction, :location, :author_id, :com_id, :com_type, :com_value, :com_entity_id, :com_entity_type_id, :client_fio, :lead_or_company_title, :region, :district, :locality, :edrpou, :what_interested, :problems, :service, :holding_name, :comment, :land_bank, :soil_treatment_technics, :spraying_technics, :harvesting_technics, :drones, :machinery_quality, :client_type_technics, :equipment_rental, :equipment_supplier, :equipment_availability, :client_type, :lpr_fio, :lpr_phone, :last_date_updated)");

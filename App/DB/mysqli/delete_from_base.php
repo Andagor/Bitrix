@@ -2,7 +2,7 @@
 
 require_once 'connect.php';
 
-// Обновление данных в MySQL
+// Удаление данных из MySQL
 function Delete_from_Base($activity_data, $table_name)
 {
     $conn = GetConnectToDB();
@@ -15,18 +15,17 @@ function Delete_from_Base($activity_data, $table_name)
         {
             $conn->close();
             return "Sucsess deleted";
-            // return "Sucsess deleted ".$activity_data['activity_id'];
         }
         else
         {
-            $error = "Error with delete: ".$activity_data['activity_id'].' '.$conn->error;
+            $error = "Error: ".$conn->error;
             $conn->close();
             return $error;
         }
     }
     else
     {
-        echo "no good ".$conn->error;
+        echo "Error: ".$conn->error;
     }
 }
 ?>

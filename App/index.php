@@ -10,7 +10,7 @@
   <body>
     <?php
         require_once "app.php";
-        $linc = '"https://b24.crm.in.ua/webhooks/Diason/analytics/Приложение/index.php"';
+        $linc = '"url tp file"';
 
         $date_from = date_create($_POST['calendar_from']);
         $date_to = date_create($_POST['calendar_to']);

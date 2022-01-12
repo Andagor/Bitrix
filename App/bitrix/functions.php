@@ -3,7 +3,7 @@
 function get($param, $next = 0)
 {
     $appParams = http_build_query(array('halt' => 0, 'cmd' => $param));
-    $appRequestUrl = 'https://carefield.bitrix24.ua/rest/202/1ip3xnjdmfcx0mcs/batch';
+    $appRequestUrl = '';
     $curl=curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_SSL_VERIFYPEER => 0,
@@ -32,7 +32,7 @@ function getDeal($dealID)
     $param['act'] = "crm.deal.get?".http_build_query(array('id' => $dealID));
     $Result = get($param);
     $DealName = $Result['result']['result']['act']['TITLE'];
-    $Deal = '<a href="https://diason.bitrix24.ua/crm/deal/details/'.$dealID.'/" target="_blank">'.$DealName.'</a>';
+    $Deal = '<a href="'.$dealID.'/" target="_blank">'.$DealName.'</a>';
     return $Deal;
 }
 

@@ -2,7 +2,7 @@
 
 require_once 'connect.php';
 
-// Обновление данных в MySQL
+// Удаление данных из MySQL
 function Delete_from_Base($activity_id, $table_name)
 {
     $conn = GetConnectToDB();

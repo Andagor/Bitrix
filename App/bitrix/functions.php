@@ -1,28 +1,13 @@
 <?php
 
-function get($param, $next = 0)
-{
-    $appParams = http_build_query(array('halt' => 0, 'cmd' => $param));
-    $appRequestUrl = '';
-    $curl=curl_init();
-    curl_setopt_array($curl, array(
-        CURLOPT_SSL_VERIFYPEER => 0,
-        CURLOPT_POST => 1,
-        CURLOPT_HEADER => 0,
-        CURLOPT_RETURNTRANSFER => 1,
-        CURLOPT_URL => $appRequestUrl,
-        CURLOPT_POSTFIELDS => $appParams
-    ));
-    $out=curl_exec($curl);
-    curl_close($curl);
-    $result = json_decode($out, 1);
-    return $result;
-}
+require_once '/app_config.php';
+
+$url = BITRIXWEBHOOK;
 
 function getUserName($userID)
 {
     $param['act'] = "user.get?".http_build_query(array("ID" => $userID));
-    $Result = get($param);
+    $Result = get($param, $url);
     $FIO = $Result['result']['result']['act']['0']['LAST_NAME'].' '.$Result['result']['result']['act']['0']['NAME'];
     return $FIO;
 }
@@ -30,7 +15,7 @@ function getUserName($userID)
 function getDeal($dealID)
 {
     $param['act'] = "crm.deal.get?".http_build_query(array('id' => $dealID));
-    $Result = get($param);
+    $Result = get($param, $url);
     $DealName = $Result['result']['result']['act']['TITLE'];
     $Deal = '<a href="'.$dealID.'/" target="_blank">'.$DealName.'</a>';
     return $Deal;

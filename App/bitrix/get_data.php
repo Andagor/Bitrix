@@ -1,5 +1,5 @@
 <?php
-echo "in get-data files<br>";
+
 require_once '../app_config.php';
 
 function get($param, $next = 0)
@@ -30,6 +30,7 @@ function GetCompanyListFieldNames($field_ID)
                 'id' => $field_ID
             ));
         $field_result = get($param);
+
         if ($field_result)
         {
             $result = $field_result['result']['result']['act']['LIST'];
@@ -55,6 +56,7 @@ function GetActivityTypes()
 {
     $param['act'] = "crm.enum.activitytype?";
     $Result = get($param);
+
     if ($Result)
     {
         $activitytyperes = $Result['result']['result']['act'];
@@ -75,6 +77,7 @@ function GetActivityStatuses()
 {
     $param['act'] = "crm.enum.activitystatus?";
     $Result = get($param);
+
     if ($Result)
     {
         $activitystatuses = $Result['result']['result']['act'];
@@ -97,6 +100,7 @@ function getUserName($userID)
             "ID" => $userID
         ));
     $Result = get($param);
+
     $error = $Result['result']['result_error']['error'];
     $error_description = $Result['result']['result_error']['error_description'];
 
@@ -125,6 +129,7 @@ function GetCompanyData($Company_ID)
                 'start' => -1
         ));
     $res = get($param);
+
     $result = $res['result']['result']['act']['0'];
     $error = $res['result']['result_error']['error'];
     $error_description = $res['result']['result_error']['error_description'];
@@ -161,9 +166,7 @@ foreach ($result['UF_CRM_5EFAF57C3534D'] as $key => $value)
 {
     $WhatInterested[] = $arWhatInterested[$value];
 }
-// file_put_contents('Applog.log', print_r('result[UF_CRM_5EFAF57C3534D]'.PHP_EOL, true), FILE_APPEND);
-// file_put_contents('Applog.log', print_r($result['UF_CRM_5EFAF57C3534D'], true), FILE_APPEND);
-// file_put_contents('Applog.log', print_r($WhatInterested, true), FILE_APPEND);
+
 $arCompany_Data['what_interested']          = implode(', ', $WhatInterested); // $arWhatInterested[$result['UF_CRM_5EFAF57C3534D']];
 $arCompany_Data['problems']                 = $result['UF_CRM_1602492629643'];
 $arCompany_Data['service']                  = $result['UF_CRM_1602492557116'];
@@ -181,13 +184,20 @@ $arCompany_Data['equipment_availability']   = $arEquipmentAvailability[$result['
 $arCompany_Data['client_type']              = $arСlientType[$result['UF_CRM_5EFAF57C44BAF']];
 $arCompany_Data['lpr_fio']                  = $result['UF_CRM_FIO_LPR'];
 $arCompany_Data['lpr_phone']                = implode(", ", $result['UF_CRM_PHONE_LPR']);
-
         return $arCompany_Data;
     }
     else
     {
         return false;
     }
+}
+
+// Форматирование даты
+function FormatDate($date)
+{
+    $new_date = new DateTime($date);
+    $formated_date = $new_date->format("Y-m-d H:i:s+0300");
+    return $formated_date;
 }
 
 function GetActivityData($activity_ID)
@@ -202,7 +212,7 @@ function GetActivityData($activity_ID)
             "start" => -1
         ));
     $ResultActivity = get($param);
-    echo '<pre>'; print_r($ResultActivity); echo '</pre>';
+
     if ($ResultActivity)
     {
         $arActivities = $ResultActivity['result']['result']['act'];
@@ -215,26 +225,6 @@ function GetActivityData($activity_ID)
             $Company_Name = '';
             $Client_Name = '';
             $Company_Data = '';
-
-            $date = $value['CREATED'];
-            $new_date = new DateTime($date);
-            $create_date = $new_date->format("Y-m-d H:i:s+0300");
-
-            $date = $value['DEADLINE'];
-            $new_date = new DateTime($date);
-            $deadline_date = $new_date->format("Y-m-d H:i:s+0300");
-
-            $date = $value['START_TIME'];
-            $new_date = new DateTime($date);
-            $start_time = $new_date->format("Y-m-d H:i:s+0300");
-
-            $date = $value['END_TIME'];
-            $new_date = new DateTime($date);
-            $close_date = $new_date->format("Y-m-d H:i:s+0300");
-
-            $date = $value['LAST_UPDATED'];
-            $new_date = new DateTime($date);
-            $last_updated_date = $new_date->format("Y-m-d H:i:s+0300");
 
             if ($value['COMMUNICATIONS']['0']['ENTITY_TYPE_ID'] == 1) // Лид
             {
@@ -294,9 +284,6 @@ function GetActivityData($activity_ID)
                     }
                 }
             }
-
-            // file_put_contents('Applog.log', print_r('Company_Data'.PHP_EOL, true), FILE_APPEND);
-            // file_put_contents('Applog.log', print_r($Company_Data, true), FILE_APPEND);
 
             $User_Name = getUserName($value['RESPONSIBLE_ID']);
             $check_User_Name = 0;
@@ -365,11 +352,11 @@ function GetActivityData($activity_ID)
                     'associated_entity_id' => $value['ASSOCIATED_ENTITY_ID'],
                     'subject' => $value['SUBJECT'],
                     'description' => $value['DESCRIPTION'],
-                    'date_create' => $create_date,
-                    'last_updated' => $last_updated_date,
-                    'start_time' => $start_time,
-                    'end_time' => $close_date,
-                    'deadline' => $deadline_date,
+                    'date_create' => FormatDate($value['CREATED']),
+                    'last_updated' => FormatDate($value['LAST_UPDATED']),
+                    'start_time' => FormatDate($value['START_TIME']),
+                    'end_time' => FormatDate($value['END_TIME']),
+                    'deadline' => FormatDate($value['DEADLINE']),
                     'completed' => ($value['COMPLETED'] == 'Y') ? 'Виконана' : 'Не виконана',
                     'status' => $arActivity_Statuses[$value['STATUS']],
                     'author_id' => $Author_Name,
